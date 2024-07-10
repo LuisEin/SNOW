@@ -28,6 +28,27 @@ def get_image_dimensions(file_path):
     dataset = None
     return width, height
 
+def mask_water(nir_band, green_band, threshold):
+    """
+    Masks water areas in the image based on a threshold calculated from green
+    and nir bands. Based on Ji, L., Zhang, L., & Wylie, B. (2009). 
+    Analysis of dynamic thresholds for the normalized difference water index. 
+    Photogrammetric engineering & remote sensing, 75(11), 1307-1317.
+    and Ji, L., Zhang, L., & Wylie, B. (2009). Analysis of dynamic thresholds for the normalized difference water index. Photogrammetric engineering & remote sensing, 75(11), 1307-1317.
+    
+    Parameters:
+    red_band (numpy array): Array representing the red band of the image.
+    threshold (float): Threshold value to identify water areas.
+    
+    Returns:
+    numpy array: Masked array where water areas are set to NaN.
+    
+    Deactivated until further notice
+    
+    """
+    water_mask = (green_band - nir_band)/(green_band + nir_band) > threshold
+    return water_mask
+
 def do_index_calculation(file, width, output_name, output_dir):
     dataset = gdal.Open(file)
     
@@ -39,6 +60,9 @@ def do_index_calculation(file, width, output_name, output_dir):
     green_band = dataset.GetRasterBand(2).ReadAsArray().astype(float)
     red_band = dataset.GetRasterBand(3).ReadAsArray().astype(float)
     nir_band = dataset.GetRasterBand(4).ReadAsArray().astype(float)
+    
+    # # Apply water masking
+    # water_mask = mask_water(nir_band, green_band, water_threshold)
 
     # Calculate indices based on output_name
     if output_name == "NDVI":
@@ -51,7 +75,10 @@ def do_index_calculation(file, width, output_name, output_dir):
         raise ValueError("Unknown index: {}".format(output_name))
 
     # Avoid division by zero
-    index = np.where((nir_band + red_band) == 0, 0, index)
+    index = np.where((nir_band + red_band) == 0, np.nan, index)
+    
+    # # Apply water mask
+    # index[water_mask] = np.nan
 
     # Get georeference info
     geo_transform = dataset.GetGeoTransform()
@@ -71,7 +98,7 @@ def do_index_calculation(file, width, output_name, output_dir):
     out_band.WriteArray(index)
 
     # Set NoData value
-    out_band.SetNoDataValue(-9999)
+    out_band.SetNoDataValue(np.nan)
 
     # Flush data to disk
     out_band.FlushCache()
@@ -103,6 +130,11 @@ outputs = ["NDVI", "BST", "GST"]
 
 # List for the desired output folders
 out_dirs = [ndvi_dir, bst_dir, gst_dir]
+
+
+# # Water masking threshold
+# water_threshold = 0.0  # As 
+
 
 # Create the output directories if they don't exist
 os.makedirs(rgb_dir, exist_ok=True)

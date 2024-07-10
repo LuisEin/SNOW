@@ -206,55 +206,60 @@ if __name__ == "__main__": # Wenn dieses Modul in ein anderes Skript importiert 
 
 
 # Define file paths and date pattern
-input_pattern = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/Indices/BST/20240218_101331_21_247b_3B_AnalyticMS_SR_clip_BST_width_6679px.tif'  
+input_pattern = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/Indices/BST/20240229_101353_47_2475_3B_AnalyticMS_SR_clip_BST_width_6679px.tif' 
+# /home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/Indices/merged_tiles/BST/20240229_merged_masked_BST_width_3332px.tif
 # Adjust the pattern to match your tiles
-# output_dir = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/code/temp/'
+output_dir = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/code/temp/'
 
-# ## Load image
-# # Using gdal
-# dataset = gdal.Open(input_pattern, gdal.GA_ReadOnly)
-# for x in range(1, dataset.RasterCount + 1):
-#     band = dataset.GetRasterBand(x)
-#     array = band.ReadAsArray()
+## Load image
+# Using gdal
+dataset = gdal.Open(input_pattern, gdal.GA_ReadOnly)
+for x in range(1, dataset.RasterCount + 1):
+    band = dataset.GetRasterBand(x)
+    array = band.ReadAsArray()
 
-# ## Filter 
-# gau_array = gaussian_filter1d(array, 3)
+## Filter 
+gau_array = gaussian_filter1d(array, 3)
+
+# check for no data values
+nodata_value = band.GetNoDataValue()
+print(f"Nodata-Wert: {nodata_value}")
 
 
 
-# ## Plot Histogram 
-# plt.hist(gau_array)
-# plt.xlabel('Value')
-# plt.ylabel('Frequency')
-# plt.title('Histogram of BST from the 18 Feb 2024') #{input_pattern[75:83]}
-# plt.show()
+## Plot Histogram 
+plt.hist(gau_array)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Histogram of BST_merged from the 29 Feb 2024') #{input_pattern[75:83]}
+plt.show()
 
-# ### Plot probability density function
-# # Erst abflachen
-# flat_data = gau_array.ravel()
-# density = gaussian_kde(flat_data)
-# x = np.linspace(min(flat_data), max(flat_data), 1000)
-# y = density(x)
-# # Probability Density Plot erstellen
-# plt.plot(x, y, label='Density')
-# plt.fill_between(x, y, alpha=0.5)
-# plt.xlabel('BST')
-# plt.ylabel('Density')
-# plt.title('Probability Density Plot 18 Feb 2024')
-# plt.legend()
-# plt.show()
+### Plot probability density function
+# Erst abflachen
+flat_data = gau_array.ravel()
+density = gaussian_kde(flat_data)
+x = np.linspace(min(flat_data), max(flat_data), 1000)
+y = density(x)
+# Probability Density Plot erstellen
+plt.plot(x, y, label='Density')
+plt.fill_between(x, y, alpha=0.5)
+plt.xlabel('BST')
+plt.ylabel('Density')
+plt.title('Probability Density Plot 18 Feb 2024')
+plt.legend()
+plt.show()
 
-# ### Schnellerer approach?
+### Schnellerer approach?
 
-# # Daten binning
-# counts, bin_edges = np.histogram(gau_array, bins=100)
+# Daten binning
+counts, bin_edges = np.histogram(gau_array, bins=100)
 
-# # Bin-Mitten berechnen
-# bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+# Bin-Mitten berechnen
+bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
 
-# # Bar-Plot erstellen
-# plt.bar(bin_centers, counts, width=bin_edges[1] - bin_edges[0])
-# plt.xlabel('Value')
-# plt.ylabel('Frequency')
-# plt.title('Binned Data Bar Plot')
-# plt.show()
+# Bar-Plot erstellen
+plt.bar(bin_centers, counts, width=bin_edges[1] - bin_edges[0])
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Binned Data Bar Plot BST 29 Feb 2024')
+plt.show()

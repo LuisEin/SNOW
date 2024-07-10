@@ -60,7 +60,7 @@ def do_index_calculation(file, width, output_name, output_dir):
         raise ValueError("Unknown index: {}".format(output_name))
 
     # Avoid division by zero
-    index = np.where(denominator == 0, 0, index)
+    index = np.where(denominator == 0, np.nan, index)
 
     # Get georeference info
     geo_transform = dataset.GetGeoTransform()
@@ -80,7 +80,7 @@ def do_index_calculation(file, width, output_name, output_dir):
     out_band.WriteArray(index)
 
     # Set NoData value
-    out_band.SetNoDataValue(-9999)
+    out_band.SetNoDataValue(np.nan)
 
     # Flush data to disk
     out_band.FlushCache()
