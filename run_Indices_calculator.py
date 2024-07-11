@@ -7,7 +7,9 @@ This script loads 4Band PlanetScope Scenes
 Extracts its bands 
 Does Indices calculations with various bands
 Exports the calculated index as .tif files
-While also saving a copy of the clipped RGB image
+While also saving a copy of the clipped RGB image.
+
+Run raw files with run_merge_tiles.py before
 
 
 @author: luis

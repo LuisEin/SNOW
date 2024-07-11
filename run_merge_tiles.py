@@ -15,8 +15,8 @@ from osgeo import gdal, ogr
 import numpy as np
 
 # Define paths
-input_pattern = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/4_band/Data_March-June_23_Feb-March_24_psscene_analytic_sr_udm2/PSScene/*AnalyticMS_SR_clip.tif'
-output_dir = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/merged_files'
+input_pattern = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/8_band/2024_04_16__psscene_analytic_8b_sr_udm2/PSScene/*AnalyticMS_SR_8b_clip.tif'
+output_dir = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/merged_files/8Band_2024_04_16__psscene_analytic_8b_sr_udm2'
 shapefile_path = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/Shapefiles/shapefile_Zugspitze/03_AOI_shp_zugspitze_reproj_for_code/AOI_zugspitze_reproj_32632.shp'  
 
 # Create output directory if it doesn't exist

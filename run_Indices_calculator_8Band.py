@@ -7,7 +7,9 @@ This script loads 8Band PlanetScope Scenes
 Extracts its bands 
 Does Indices calculations with various bands
 Exports the calculated index as .tif files
-While also saving a copy of the clipped RGB image
+While also saving a copy of the clipped RGB image.
+
+Run raw files with run_merge_tiles.py before
 
 @author: luis
 """
@@ -93,7 +95,7 @@ def do_index_calculation(file, width, output_name, output_dir):
     print(f"{output_name} calculation and export completed for {file}. Output saved as {out_file}")
 
 # Define file paths and date pattern
-input_pattern = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/8_band/matching_to_SWS_02_24_until_06-26_psscene_analytic_8b_sr_udm2/PSScene/*AnalyticMS_SR_8b_clip.tif'  
+input_pattern = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/merged_files/8Band_matching_to_SWS_02_24_until_06-26_psscene_analytic_8b_sr_udm2/*merged.tif'  
 # Adjust the pattern to match your tiles
 output_dir = '/home/luis/Data/04_Uni/03_Master_Thesis/SNOW/02_data/PlanetScope_Data/code/temp/'
 rgb_dir = os.path.join(output_dir, 'RGB')
